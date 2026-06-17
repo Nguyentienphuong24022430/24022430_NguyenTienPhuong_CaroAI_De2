@@ -42,25 +42,25 @@ def check_win(board, player):
 
 def get_valid_moves(board):
     """
-    Tối ưu nâng cao: Chỉ sinh các nước đi nằm trong bán kính 2 ô lân cận 
-    xung quanh các quân cờ đã đánh để thu hẹp không gian tìm kiếm, tránh treo máy.
+    Tối ưu nâng cao: Sử dụng set để kiểm tra trùng trong O(1),
+    chỉ sinh các nước đi nằm trong bán kính 2 ô lân cận.
     """
-    moves = []
+    moves_set = set()
     has_pieces = False
     
     for r in range(BOARD_SIZE):
         for c in range(BOARD_SIZE):
             if board[r][c] != EMPTY:
                 has_pieces = True
+                # Duyệt bán kính 2 ô xung quanh quân cờ hiện tại
                 for dr in range(-2, 3):
                     for dc in range(-2, 3):
                         nr, nc = r + dr, c + dc
                         if 0 <= nr < BOARD_SIZE and 0 <= nc < BOARD_SIZE:
-                            if board[nr][nc] == EMPTY and (nr, nc) not in moves:
-                                moves.append((nr, nc))
+                            if board[nr][nc] == EMPTY:
+                                moves_set.add((nr, nc)) # Thêm vào set tự động loại bỏ trùng lặp trong O(1)
                                 
-    # Nếu đầu ván (bàn cờ trống), ưu tiên chọn ô chính giữa bàn cờ
     if not has_pieces:
         return [(BOARD_SIZE // 2, BOARD_SIZE // 2)]
         
-    return moves
+    return list(moves_set) # Chuyển về list để trả về cho AI duyệt vòng lặp
