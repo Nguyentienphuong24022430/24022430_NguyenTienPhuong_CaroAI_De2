@@ -62,4 +62,4 @@ def get_valid_moves(board):
     if not has_pieces:
         return [(BOARD_SIZE // 2, BOARD_SIZE // 2)]
         
-    return list(moves_set) # Chuyển về list để trả về cho AI duyệt vòng lặp
+    return list(moves_set) 

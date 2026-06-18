@@ -12,7 +12,6 @@ def evaluate_line(line):
     player_count = line.count(PLAYER_X)
     empty_count = line.count(EMPTY)
     
-    # --- THẾ CỜ CỦA AI (Điểm Dương) ---
     if ai_count == 4: 
         return 100000              
     if ai_count == 3 and empty_count == 1: 
@@ -20,7 +19,6 @@ def evaluate_line(line):
     if ai_count == 2 and empty_count == 2: 
         return 200                 
 
-    # --- THẾ CỜ CỦA NGƯỜI CHƠI (Điểm Âm) ---
     if player_count == 4: 
         return -100000            
     if player_count == 3 and empty_count == 1: 
@@ -35,19 +33,15 @@ def evaluate_board(board):
     score = 0
     for r in range(BOARD_SIZE):
         for c in range(BOARD_SIZE):
-            # Hàng ngang
             if c <= BOARD_SIZE - WIN_COUNT:
                 line = [board[r][c+i] for i in range(WIN_COUNT)]
                 score += evaluate_line(line)
-            # Hàng dọc
             if r <= BOARD_SIZE - WIN_COUNT:
                 line = [board[r+i][c] for i in range(WIN_COUNT)]
                 score += evaluate_line(line)
-            # Chéo xuôi
             if r <= BOARD_SIZE - WIN_COUNT and c <= BOARD_SIZE - WIN_COUNT:
                 line = [board[r+i][c+i] for i in range(WIN_COUNT)]
                 score += evaluate_line(line)
-            # Chéo ngược
             if r <= BOARD_SIZE - WIN_COUNT and c >= WIN_COUNT - 1:
                 line = [board[r+i][c-i] for i in range(WIN_COUNT)]
                 score += evaluate_line(line)
@@ -55,7 +49,7 @@ def evaluate_board(board):
 
 class CaroAI:
     def __init__(self):
-        self.state_count = 0  # Đếm số trạng thái đã xét phục vụ Level 3
+        self.state_count = 0 
 
     def minimax(self, board, depth, is_max):
         self.state_count += 1
@@ -76,7 +70,7 @@ class CaroAI:
                 r, c = move
                 board[r][c] = AI_O
                 score, _ = self.minimax(board, depth - 1, False)
-                board[r][c] = EMPTY  # Hoàn tác
+                board[r][c] = EMPTY  
                 if score > best_score:
                     best_score = score
                     best_move = move
@@ -116,7 +110,7 @@ class CaroAI:
                     best_move = move
                 alpha = max(alpha, best_score)
                 if beta <= alpha:
-                    break  # Cắt nhánh MIN
+                    break  
             return best_score, best_move
         else:
             best_score = math.inf
@@ -130,5 +124,5 @@ class CaroAI:
                     best_move = move
                 beta = min(beta, best_score)
                 if beta <= alpha:
-                    break  # Cắt nhánh MAX
+                    break  
             return best_score, best_move

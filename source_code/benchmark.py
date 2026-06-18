@@ -51,7 +51,6 @@ def run_benchmark():
             time_ab = (time.time() - start) * 1000
             count_ab = ai.state_count
             
-            # --- IN KẾT QUẢ RA MÀN HÌNH ---
             time_mm_str = f"{time_mm:.2f}" if isinstance(time_mm, float) and time_mm > 0 else "0.00"
             if score_mm == "N/A": time_mm_str = "N/A"
             
