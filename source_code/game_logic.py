@@ -1,4 +1,3 @@
-# game_logic.py
 from config import BOARD_SIZE, WIN_COUNT, EMPTY, PLAYER_X, AI_O
 
 def create_board():

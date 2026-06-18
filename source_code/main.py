@@ -1,4 +1,3 @@
-# main.py
 import time
 from config import PLAYER_X, AI_O, EMPTY, BOARD_SIZE
 from game_logic import print_board, create_board, check_win, is_board_full
