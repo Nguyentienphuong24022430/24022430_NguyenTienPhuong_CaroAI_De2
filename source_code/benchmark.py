@@ -21,14 +21,12 @@ def load_test_states():
     raise FileNotFoundError("Không tìm thấy file test_states.json! Hãy chắc chắn bạn đã tạo file này trong thư mục tests.")
 
 def run_benchmark():
-    # Định nghĩa biến data từ hàm load dữ liệu
     data = load_test_states()
     ai = CaroAI()
     
     print(f"\n{'Trạng Thái':<18} | {'Depth':<5} | {'Thuật Toán':<12} | {'Nước Đi':<10} | {'Điểm':<8} | {'Số Trạng Thái':<13} | {'Thời Gian (ms)':<15}")
     print("-" * 95)
     
-    # Vòng lặp nằm bên trong hàm run_benchmark
     for state in data["states"]:
         name = state["name"]
         original_board = state["board"]
@@ -37,7 +35,6 @@ def run_benchmark():
             
             # --- KIỂM THỬ MINIMAX ---
             if depth <= 3:
-                # Nếu depth từ 1 đến 3 thì chạy Minimax bình thường
                 board_mm = copy.deepcopy(original_board)
                 ai.state_count = 0
                 start = time.time()
@@ -45,11 +42,9 @@ def run_benchmark():
                 time_mm = (time.time() - start) * 1000
                 count_mm = ai.state_count
             else:
-                # Nếu depth = 4, bỏ qua Minimax để tránh treo máy, gán nhãn N/A
                 score_mm, move_mm, count_mm, time_mm = "N/A", "N/A", "N/A", 0.0
             
             # --- KIỂM THỬ ALPHA-BETA PRUNING ---
-            # Luôn chạy ở mọi Depth (kể cả 4) nhờ có cơ chế cắt nhánh cực mạnh
             board_ab = copy.deepcopy(original_board)
             ai.state_count = 0
             start = time.time()
@@ -58,7 +53,6 @@ def run_benchmark():
             count_ab = ai.state_count
             
             # --- IN KẾT QUẢ RA MÀN HÌNH ---
-            # Định dạng hiển thị chuỗi thời gian rõ ràng
             time_mm_str = f"{time_mm:.2f}" if isinstance(time_mm, float) and time_mm > 0 else "0.00"
             if score_mm == "N/A": time_mm_str = "N/A"
             
