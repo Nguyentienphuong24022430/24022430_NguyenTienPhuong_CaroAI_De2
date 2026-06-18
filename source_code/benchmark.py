@@ -2,7 +2,7 @@
 import json
 import os
 import time
-import copy  # Thư viện để sao chép sâu trạng thái bàn cờ
+import copy  
 from ai_agent import CaroAI
 
 def load_test_states():
@@ -33,7 +33,6 @@ def run_benchmark():
         name = state["name"]
         original_board = state["board"]
         
-        # Duyệt qua các mốc độ sâu từ 1 đến 4 để phân tích biến động
         for depth in [1, 2, 3, 4]:
             
             # --- KIỂM THỬ MINIMAX ---

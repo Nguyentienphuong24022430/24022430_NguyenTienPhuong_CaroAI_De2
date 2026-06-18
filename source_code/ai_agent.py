@@ -14,19 +14,19 @@ def evaluate_line(line):
     
     # --- THẾ CỜ CỦA AI (Điểm Dương) ---
     if ai_count == 4: 
-        return 100000              # Thắng tuyệt đối
+        return 100000              
     if ai_count == 3 and empty_count == 1: 
-        return 5000                # AI có 3 quân thoáng: Cực mạnh, chuẩn bị thắng
+        return 5000                
     if ai_count == 2 and empty_count == 2: 
-        return 200                 # AI có 2 quân thoáng: Khuyến khích tấn công
+        return 200                 
 
     # --- THẾ CỜ CỦA NGƯỜI CHƠI (Điểm Âm) ---
     if player_count == 4: 
-        return -100000             # Người chơi thắng
+        return -100000            
     if player_count == 3 and empty_count == 1: 
-        return -50000              # Người chơi có 3 quân: AI BẮT BUỘC PHẢI CHẶN NGAY
+        return -50000              
     if player_count == 2 and empty_count == 2: 
-        return -3000               # Người chơi có 2 quân thoáng: Ngăn chặn từ sớm
+        return -3000              
 
     return 0
 
@@ -66,7 +66,7 @@ class CaroAI:
             return evaluate_board(board), None
 
         moves = get_valid_moves(board)
-        # Mẹo tối ưu Move Ordering: Ưu tiên các nước đi gần tâm bàn cờ trước để Alpha-Beta cắt nhánh sớm hơn
+        
         center = BOARD_SIZE // 2
         moves.sort(key=lambda m: abs(m[0] - center) + abs(m[1] - center))
 

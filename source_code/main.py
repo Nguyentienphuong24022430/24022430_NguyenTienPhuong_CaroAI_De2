@@ -47,12 +47,12 @@ def main():
         else:
             score, best_move = ai.alpha_beta(board, depth_limit, float('-inf'), float('inf'), True)
 
-        runtime = (time.time() - start) * 1000  # Quy đổi sang miligiây (ms)
+        runtime = (time.time() - start) * 1000 
 
         if best_move:
             board[best_move[0]][best_move[1]] = AI_O
             print(f"-> AI quyết định đánh vào ô (dòng cột): {best_move[0]} {best_move[1]}")
-            # Xuất log thông số thực nghiệm đầy đủ theo yêu cầu chức năng
+            
             print(f"   [LOG]: Điểm đánh giá: {score} | Trạng thái đã xét: {ai.state_count} | Thời gian: {runtime:.2f} ms")
         
         print_board(board)

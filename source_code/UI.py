@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 import time
-
-# Import các cấu hình và logic từ thư mục source_code
 from config import PLAYER_X, AI_O, EMPTY, BOARD_SIZE
 from game_logic import check_win, is_board_full, create_board
 from ai_agent import CaroAI
@@ -11,8 +9,7 @@ class CaroGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("CHƯƠNG TRÌNH CỜ CARO AI - NGUYỄN TIẾN PHƯƠNG")
-        
-        # Cấu hình kích thước cửa sổ và màu nền tổng thể hiện đại
+
         self.root.geometry("620x720")
         self.root.configure(bg="#F8F9FA")
         
@@ -20,29 +17,21 @@ class CaroGUI:
         self.board = create_board()
         self.ai = CaroAI()
         
-        # Cấu hình mặc định
         self.ai_mode = "alpha_beta"
-        self.depth_limit = 4  # Đã cập nhật mặc định lên 4 theo mong muốn của bạn
+        self.depth_limit = 4  
         self.first_turn = "Người (X)"
-        self.game_started = False  # Biến cờ đánh dấu ván đấu đã bắt đầu hay chưa
+        self.game_started = False  
         
-        # Cấu hình style cho các widget ttk
         self.setup_styles()
-        
-        # Thiết lập giao diện
         self.setup_menu()
         self.setup_board_ui()
         
     def setup_styles(self):
         """Định nghĩa style hiện đại cho các thành phần UI"""
         style = ttk.Style()
-        style.theme_use("clam")  # Sử dụng theme clam làm gốc để dễ tùy biến
-        
-        # Style cho thanh menu điều khiển
+        style.theme_use("clam")  
         style.configure("Top.TFrame", background="#ECEFF1")
         style.configure("TLabel", background="#ECEFF1", font=("Segoe UI", 10))
-        
-        # Style cho nút bấm "Ván Mới" thanh lịch
         style.configure("Action.TButton", font=("Segoe UI", 10, "bold"), foreground="white", background="#2A9D8F")
         style.map("Action.TButton", background=[("active", "#21867A")])
 
@@ -50,8 +39,7 @@ class CaroGUI:
         """Tạo thanh điều khiển cấu hình thuật toán, độ sâu và lượt đi trước"""
         control_frame = ttk.Frame(self.root, style="Top.TFrame", padding=12)
         control_frame.pack(side=tk.TOP, fill=tk.X)
-        
-        # 1. Chọn thuật toán
+    
         ttk.Label(control_frame, text="Thuật toán:").grid(row=0, column=0, padx=4, sticky="w")
         self.mode_var = tk.StringVar(value="Alpha-Beta Pruning")
         self.mode_cb = ttk.Combobox(control_frame, textvariable=self.mode_var, 
@@ -60,7 +48,6 @@ class CaroGUI:
         self.mode_cb.grid(row=0, column=1, padx=4)
         self.mode_cb.bind("<<ComboboxSelected>>", self.change_config)
         
-        # 2. Chọn độ sâu
         ttk.Label(control_frame, text="Độ sâu:").grid(row=0, column=2, padx=4, sticky="w")
         self.depth_var = tk.IntVar(value=4)
         self.depth_cb = ttk.Combobox(control_frame, textvariable=self.depth_var, 
@@ -69,7 +56,6 @@ class CaroGUI:
         self.depth_cb.grid(row=0, column=3, padx=4)
         self.depth_cb.bind("<<ComboboxSelected>>", self.change_config)
         
-        # 3. Chọn đi trước
         ttk.Label(control_frame, text="Đi trước:").grid(row=0, column=4, padx=4, sticky="w")
         self.turn_var = tk.StringVar(value="Người (X)")
         self.turn_cb = ttk.Combobox(control_frame, textvariable=self.turn_var, 
@@ -78,18 +64,15 @@ class CaroGUI:
         self.turn_cb.grid(row=0, column=5, padx=4)
         self.turn_cb.bind("<<ComboboxSelected>>", self.change_config)
         
-        # 4. Nút bấm Reset ván mới
         reset_btn = ttk.Button(control_frame, text="Ván Mới", style="Action.TButton", command=self.reset_game)
         reset_btn.grid(row=0, column=6, padx=12)
         
-        # Khu vực hiển thị LOG thực nghiệm trực tiếp lên giao diện dưới đáy phẳng
         self.log_label = tk.Label(self.root, text="Hệ thống sẵn sàng. Hãy chọn cấu hình cấu hình rồi bấm 'Ván Mới'!", 
                                   bg="#F8F9FA", fg="#4A5568", font=("Segoe UI", 10, "italic"))
         self.log_label.pack(side=tk.BOTTOM, fill=tk.X, pady=8)
         
     def setup_board_ui(self):
         """Khởi tạo lưới ma trận các nút bấm phẳng, bo góc nhẹ đại diện cho bàn cờ 9x9"""
-        # Khung chứa bàn cờ đổ màu nền shadow tạo chiều sâu
         self.board_wrapper = tk.Frame(self.root, bg="#D1D5DB", bd=1, relief=tk.FLAT)
         self.board_wrapper.pack(padx=20, pady=25)
         
@@ -97,13 +80,11 @@ class CaroGUI:
         
         for r in range(BOARD_SIZE):
             for c in range(BOARD_SIZE):
-                # Tạo nút bấm phẳng (flat), font chữ dày, màu nền trắng tinh tế
                 btn = tk.Button(self.board_wrapper, text="", font=("Segoe UI", 13, "bold"), 
                                 width=4, height=2, bg="#FFFFFF", fg="#FFFFFF",
                                 activebackground="#E9ECEF", relief=tk.FLAT, bd=0)
-                btn.grid(row=r, column=c, padx=1, pady=1)  # Khoảng cách 1px tạo đường lưới thanh mảnh
+                btn.grid(row=r, column=c, padx=1, pady=1) 
                 
-                # Bind các sự kiện di chuột (Hover effect) để giao diện sống động hơn
                 btn.bind("<Enter>", lambda event, button=btn: self.on_hover(button))
                 btn.bind("<Leave>", lambda event, button=btn: self.on_leave(button))
                 btn.config(command=lambda row=r, col=c: self.player_move(row, col))
@@ -146,11 +127,10 @@ class CaroGUI:
         if self.board[r][c] != EMPTY:
             return
             
-        # Kích hoạt khóa cứng thanh menu cấu hình ngay từ nước đi đầu tiên
         if not self.game_started:
             self.lock_controls()
         
-        # --- LƯỢT NGƯỜI CHƠI (X) --- Màu đỏ san hô
+        # --- LƯỢT NGƯỜI CHƠI (X)
         self.board[r][c] = PLAYER_X
         self.buttons[r][c].config(text=PLAYER_X, fg="#E63946", bg="#F8D7DA", state=tk.DISABLED)
         
@@ -182,13 +162,12 @@ class CaroGUI:
             
         runtime = (time.time() - start) * 1000
         
-        # --- LƯỢT MÁY TÍNH (O) --- Màu xanh Deep Blue sang trọng
+        # --- LƯỢT MÁY TÍNH (O) 
         if best_move:
             r, c = best_move
             self.board[r][c] = AI_O
             self.buttons[r][c].config(text=AI_O, fg="#1D3557", bg="#CCE5FF", state=tk.DISABLED)
             
-            # Đẩy log thực nghiệm xuống nhãn trạng thái dưới cùng
             self.log_label.config(text=f"[LOG]: Ô đánh: ({r}, {c}) | Điểm: {score} | Duyệt: {self.ai.state_count} trạng thái | Thời gian: {runtime:.2f} ms", fg="#2563EB")
             
             if check_win(self.board, AI_O):
@@ -215,11 +194,9 @@ class CaroGUI:
             for c in range(BOARD_SIZE):
                 self.buttons[r][c].config(text="", state=tk.NORMAL, bg="#FFFFFF")
                 
-        # Giải phóng menu cấu hình cho phép chọn lại trước khi bấm nước mới
         self.unlock_controls()
         self.change_config()
         
-        # Nếu cấu hình chọn Máy đi trước, kích hoạt AI ngay lập tức và khóa luôn combo
         if self.first_turn == "Máy (O)":
             self.lock_controls()
             self.log_label.config(text="Máy (O) được quyền đi trước và đang tính toán...", fg="#2563EB")

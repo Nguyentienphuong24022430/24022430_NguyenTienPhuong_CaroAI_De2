@@ -22,7 +22,7 @@ def is_board_full(board):
 
 def check_win(board, player):
     """Kiểm tra điều kiện kết thúc: 4 quân liên tiếp theo 4 hướng"""
-    directions = [(0, 1), (1, 0), (1, 1), (1, -1)]  # Ngang, Dọc, Chéo xuôi, Chéo ngược
+    directions = [(0, 1), (1, 0), (1, 1), (1, -1)]  
     
     for r in range(BOARD_SIZE):
         for c in range(BOARD_SIZE):
@@ -58,7 +58,7 @@ def get_valid_moves(board):
                         nr, nc = r + dr, c + dc
                         if 0 <= nr < BOARD_SIZE and 0 <= nc < BOARD_SIZE:
                             if board[nr][nc] == EMPTY:
-                                moves_set.add((nr, nc)) # Thêm vào set tự động loại bỏ trùng lặp trong O(1)
+                                moves_set.add((nr, nc)) 
                                 
     if not has_pieces:
         return [(BOARD_SIZE // 2, BOARD_SIZE // 2)]
