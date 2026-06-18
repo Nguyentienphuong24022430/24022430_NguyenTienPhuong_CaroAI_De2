@@ -44,7 +44,7 @@ python source_code/main.py
 ```
 hoặc 
 ```bash
-python source_code/main.py
+python source_code/UI.py
 ```
 (Nếu hệ thống của bạn sử dụng nhiều phiên bản Python, hãy thay bằng lệnh python3 source_code/main.py)
 
