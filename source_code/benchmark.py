@@ -28,22 +28,29 @@ def run_benchmark():
     print(f"\n{'Trạng Thái':<18} | {'Depth':<5} | {'Thuật Toán':<12} | {'Nước Đi':<10} | {'Điểm':<8} | {'Số Trạng Thái':<13} | {'Thời Gian (ms)':<15}")
     print("-" * 95)
     
-    # Vòng lặp phải thụt lề nằm bên trong hàm run_benchmark
+    # Vòng lặp nằm bên trong hàm run_benchmark
     for state in data["states"]:
         name = state["name"]
         original_board = state["board"]
         
-        # Duyệt qua các mốc độ sâu 1, 2, 3 để phân tích biến động
-        for depth in [1, 2, 3]:  
-            # Kiểm thử Minimax trên bản sao riêng biệt
-            board_mm = copy.deepcopy(original_board)
-            ai.state_count = 0
-            start = time.time()
-            score_mm, move_mm = ai.minimax(board_mm, depth, True)
-            time_mm = (time.time() - start) * 1000
-            count_mm = ai.state_count
+        # Duyệt qua các mốc độ sâu từ 1 đến 4 để phân tích biến động
+        for depth in [1, 2, 3, 4]:
             
-            # Kiểm thử Alpha-Beta Pruning trên bản sao riêng biệt
+            # --- KIỂM THỬ MINIMAX ---
+            if depth <= 3:
+                # Nếu depth từ 1 đến 3 thì chạy Minimax bình thường
+                board_mm = copy.deepcopy(original_board)
+                ai.state_count = 0
+                start = time.time()
+                score_mm, move_mm = ai.minimax(board_mm, depth, True)
+                time_mm = (time.time() - start) * 1000
+                count_mm = ai.state_count
+            else:
+                # Nếu depth = 4, bỏ qua Minimax để tránh treo máy, gán nhãn N/A
+                score_mm, move_mm, count_mm, time_mm = "N/A", "N/A", "N/A", 0.0
+            
+            # --- KIỂM THỬ ALPHA-BETA PRUNING ---
+            # Luôn chạy ở mọi Depth (kể cả 4) nhờ có cơ chế cắt nhánh cực mạnh
             board_ab = copy.deepcopy(original_board)
             ai.state_count = 0
             start = time.time()
@@ -51,7 +58,12 @@ def run_benchmark():
             time_ab = (time.time() - start) * 1000
             count_ab = ai.state_count
             
-            print(f"{name:<18} | {depth:<5} | {'Minimax':<12} | {str(move_mm):<10} | {score_mm:<8} | {count_mm:<13} | {time_mm:.2f}")
+            # --- IN KẾT QUẢ RA MÀN HÌNH ---
+            # Định dạng hiển thị chuỗi thời gian rõ ràng
+            time_mm_str = f"{time_mm:.2f}" if isinstance(time_mm, float) and time_mm > 0 else "0.00"
+            if score_mm == "N/A": time_mm_str = "N/A"
+            
+            print(f"{name:<18} | {depth:<5} | {'Minimax':<12} | {str(move_mm):<10} | {score_mm:<8} | {count_mm:<13} | {time_mm_str}")
             print(f"{'':<18} | {'':<5} | {'Alpha-Beta':<12} | {str(move_ab):<10} | {score_ab:<8} | {count_ab:<13} | {time_ab:.2f}")
         print("-" * 95)
 
